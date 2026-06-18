@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bloom - A minimal and calm peach-themed habit tracker designed to help you build healthy routines.">
+  <title>bloom. — nurture your habits</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="glow glow-1" aria-hidden="true"></div>
+  <div class="glow glow-2" aria-hidden="true"></div>
+
+  <div class="app-container">
+    <!-- Header / Brand -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-logo" aria-hidden="true">🌸</span>
+        <div class="brand-text">
+          <h1>bloom.</h1>
+          <p class="tagline">nurture your daily habits</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn btn-icon" title="Toggle dark mode" aria-label="Toggle dark mode">
+          <svg class="icon sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+          </svg>
+          <svg class="icon moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        </button>
+        <button id="new-habit-trigger" class="btn btn-primary">
+          <span class="plus-icon">+</span> new habit
+        </button>
+      </div>
+    </header>
+
+    <main class="app-content">
+      <!-- Left Column: Main Tracker Area -->
+      <section class="tracker-section">
+        <!-- Habit Category Filters -->
+        <div class="filters-container">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="mind">🧠 Mind</button>
+          <button class="filter-btn" data-filter="body">💪 Body</button>
+          <button class="filter-btn" data-filter="growth">🌱 Growth</button>
+          <button class="filter-btn" data-filter="soul">✨ Soul</button>
+        </div>
+
+        <!-- Habits List Grid -->
+        <div id="habits-grid" class="habits-grid">
+          <!-- Habits will be rendered here dynamically via JS -->
+          <div class="empty-state" id="empty-state">
+            <span class="empty-icon">🌱</span>
+            <h3>No habits here yet</h3>
+            <p>Plant your first habit to start blooming.</p>
+            <button id="empty-state-trigger" class="btn btn-secondary">create habit</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Stats & Insights Panel -->
+      <aside class="dashboard-panel">
+        <!-- Progress Card -->
+        <div class="glass-card progress-card">
+          <h2>today's growth</h2>
+          <div class="progress-container">
+            <div class="progress-ring-wrapper">
+              <svg class="progress-ring" width="120" height="120">
+                <circle class="progress-ring-bg" stroke="var(--ring-bg)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" />
+                <circle id="today-progress-ring" class="progress-ring-fill" stroke="var(--peach-accent)" stroke-width="8" stroke-linecap="round" fill="transparent" r="50" cx="60" cy="60" />
+              </svg>
+              <div class="progress-ring-text">
+                <span id="today-progress-percent">0%</span>
+                <span class="label">done</span>
+              </div>
+            </div>
+            <div class="progress-summary">
+              <div class="stat-row">
+                <span class="stat-number" id="stats-completed">0</span>
+                <span class="stat-label">completed</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-row">
+                <span class="stat-number" id="stats-total">0</span>
+                <span class="stat-label">total habits</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Streaks Card -->
+        <div class="glass-card streaks-card">
+          <div class="streak-item">
+            <span class="streak-icon">🔥</span>
+            <div>
+              <h3>current streak</h3>
+              <p><span id="current-streak-val">0</span> days</p>
+            </div>
+          </div>
+          <div class="streak-item">
+            <span class="streak-icon">🏆</span>
+            <div>
+              <h3>best streak</h3>
+              <p><span id="best-streak-val">0</span> days</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Consistency Map (30-day heatmap grid) -->
+        <div class="glass-card heatmap-card">
+          <h2>consistency map</h2>
+          <p class="subtitle">last 30 days of dedication</p>
+          <div id="heatmap-grid" class="heatmap-grid" aria-label="Habit completion heatmap">
+            <!-- Heatmap blocks generated by JS -->
+          </div>
+          <div class="heatmap-legend">
+            <span>less</span>
+            <div class="legend-box level-0"></div>
+            <div class="legend-box level-1"></div>
+            <div class="legend-box level-2"></div>
+            <div class="legend-box level-3"></div>
+            <span>more</span>
+          </div>
+        </div>
+
+        <!-- Category breakdown -->
+        <div class="glass-card categories-card">
+          <h2>focus areas</h2>
+          <div class="category-breakdown-list">
+            <div class="cat-stat">
+              <div class="cat-info">
+                <span>🧠 Mind</span>
+                <span id="cat-mind-val">0%</span>
+              </div>
+              <div class="cat-bar"><div id="cat-mind-bar" style="width: 0%;"></div></div>
+            </div>
+            <div class="cat-stat">
+              <div class="cat-info">
+                <span>💪 Body</span>
+                <span id="cat-body-val">0%</span>
+              </div>
+              <div class="cat-bar"><div id="cat-body-bar" style="width: 0%;"></div></div>
+            </div>
+            <div class="cat-stat">
+              <div class="cat-info">
+                <span>🌱 Growth</span>
+                <span id="cat-growth-val">0%</span>
+              </div>
+              <div class="cat-bar"><div id="cat-growth-bar" style="width: 0%;"></div></div>
+            </div>
+            <div class="cat-stat">
+              <div class="cat-info">
+                <span>✨ Soul</span>
+                <span id="cat-soul-val">0%</span>
+              </div>
+              <div class="cat-bar"><div id="cat-soul-bar" style="width: 0%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <p>bloom habit tracker &copy; 2026. take care of your time.</p>
+    </footer>
+  </div>
+
+  <!-- Dialog Modal: Add / Edit Habit -->
+  <dialog id="habit-dialog" class="habit-dialog glass-card">
+    <div class="dialog-header">
+      <h2 id="dialog-title">plant a habit</h2>
+      <button id="dialog-close" class="btn btn-icon" aria-label="Close dialog">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <form id="habit-form" method="dialog">
+      <input type="hidden" id="habit-id" value="">
+      
+      <div class="form-group">
+        <label for="habit-name">what habit do you want to build?</label>
+        <input type="text" id="habit-name" placeholder="e.g. read, stretch, meditate..." required autocomplete="off" maxlength="35">
+      </div>
+
+      <div class="form-group-row">
+        <div class="form-group">
+          <label for="habit-category">focus area</label>
+          <select id="habit-category" required>
+            <option value="mind">🧠 Mind</option>
+            <option value="body">💪 Body</option>
+            <option value="growth">🌱 Growth</option>
+            <option value="soul">✨ Soul</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="habit-frequency">frequency</label>
+          <select id="habit-frequency" required>
+            <option value="daily">Every day</option>
+            <option value="weekdays">Weekdays only</option>
+            <option value="weekends">Weekends only</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>choose a color theme</label>
+        <div class="theme-picker">
+          <label class="theme-option theme-peach">
+            <input type="radio" name="habit-color" value="peach" checked>
+            <span class="theme-dot"></span>
+          </label>
+          <label class="theme-option theme-apricot">
+            <input type="radio" name="habit-color" value="apricot">
+            <span class="theme-dot"></span>
+          </label>
+          <label class="theme-option theme-coral">
+            <input type="radio" name="habit-color" value="coral">
+            <span class="theme-dot"></span>
+          </label>
+          <label class="theme-option theme-rose">
+            <input type="radio" name="habit-color" value="rose">
+            <span class="theme-dot"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="habit-emoji">icon / emoji</label>
+        <div class="emoji-picker-container">
+          <input type="text" id="habit-emoji" value="🌸" readonly>
+          <div class="emoji-presets">
+            <button type="button" class="emoji-btn">🌸</button>
+            <button type="button" class="emoji-btn">💧</button>
+            <button type="button" class="emoji-btn">📚</button>
+            <button type="button" class="emoji-btn">🧘</button>
+            <button type="button" class="emoji-btn">🏃</button>
+            <button type="button" class="emoji-btn">🍎</button>
+            <button type="button" class="emoji-btn">🎨</button>
+            <button type="button" class="emoji-btn">💻</button>
+            <button type="button" class="emoji-btn">🛌</button>
+            <button type="button" class="emoji-btn">🌿</button>
+            <button type="button" class="emoji-btn">✍️</button>
+            <button type="button" class="emoji-btn">🍵</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" id="dialog-delete" class="btn btn-danger hidden">Delete</button>
+        <button type="button" id="dialog-cancel" class="btn btn-secondary">Cancel</button>
+        <button type="submit" id="dialog-submit" class="btn btn-primary">Plant Habit</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Audio elements for micro-interactions (using inline synth or simple sound toggling) -->
+  <script src="app.js" type="module"></script>
+</body>
+</html>
