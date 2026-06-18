@@ -6,7 +6,7 @@ A minimal habit tracker that helps you build and stick to daily routines.
 
 ## Overview
 
-Bloom is a fully client-side habit tracker. There's no backend and no account system — every habit you create and every day you check off is saved directly in your browser's `localStorage`. The interface leans into a soft, glassmorphic, peach-and-cream design system built on modern CSS (OKLCH colors), paired with the Outfit and Quicksand Google Fonts.
+Bloom is a fully client-side habit tracker. There's no backend and no account system — every habit you create and every day you check off is saved directly in your browser's `localStorage`.
 
 On first visit, the app seeds itself with four demo habits and 30 days of realistic-looking history so the dashboard isn't empty — you can immediately see how streaks, heatmaps, and category breakdowns look before adding your own habits.
 
